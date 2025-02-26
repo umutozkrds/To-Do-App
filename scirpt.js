@@ -1,6 +1,19 @@
 const ui = new UI;
 
+function initDarkMode() {
+    // Check for saved dark mode preference
+    const darkMode = localStorage.getItem('darkMode') === 'true';
 
+    // Set initial state
+    document.body.classList.toggle('dark-mode', darkMode);
+    ui.darkModeToggle.checked = darkMode;
+
+    // Add event listener for toggle
+    ui.darkModeToggle.addEventListener('change', () => {
+        document.body.classList.toggle('dark-mode');
+        localStorage.setItem('darkMode', ui.darkModeToggle.checked);
+    });
+}
 
 ui.saveButton.addEventListener("click", () => {
 
@@ -38,19 +51,19 @@ ui.saveButton.addEventListener("click", () => {
 
         card.querySelector(".form-check-input").addEventListener("change", () => {
             checkbox = card.querySelector(".form-check-input");
-            
+
             if (checkbox.checked) {
                 card.querySelector("h5").style.textDecoration = "line-through";
                 card.querySelector("h6").style.textDecoration = "line-through";
                 card.style.opacity = 0.5;
-                
+
             }
             else {
                 card.querySelector("h5").style.textDecoration = "";
                 card.querySelector("h6").style.textDecoration = "";
                 card.style.opacity = 1;
             }
-            
+
         })
 
         card.querySelector(".delete-btn").addEventListener("click", function () {
@@ -117,3 +130,5 @@ function clearIsactive() {
 }
 
 loadItems();
+
+initDarkMode();
