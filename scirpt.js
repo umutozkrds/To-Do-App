@@ -49,23 +49,6 @@ ui.saveButton.addEventListener("click", () => {
         
         `;
 
-        card.querySelector(".form-check-input").addEventListener("change", () => {
-            checkbox = card.querySelector(".form-check-input");
-
-            if (checkbox.checked) {
-                card.querySelector("h5").style.textDecoration = "line-through";
-                card.querySelector("h6").style.textDecoration = "line-through";
-                card.style.opacity = 0.5;
-
-            }
-            else {
-                card.querySelector("h5").style.textDecoration = "";
-                card.querySelector("h6").style.textDecoration = "";
-                card.style.opacity = 1;
-            }
-
-        })
-
         card.querySelector(".delete-btn").addEventListener("click", function () {
             card.remove(); // HTML'den kaldır
             saveToLocalStorage(); // LocalStorage'ı güncelle
@@ -98,11 +81,27 @@ function loadItems() {
     if (list) {
         ui.todoList.innerHTML = list;
 
-
+        // Reattach delete button event listeners
         document.querySelectorAll(".delete-btn").forEach(button => {
             button.addEventListener("click", function () {
                 button.closest(".col-sm-6").remove(); // Kartı kaldır
                 saveToLocalStorage(); // Güncelle
+            });
+        });
+
+        // Add checkbox event listeners to loaded items
+        document.querySelectorAll(".form-check-input").forEach(checkbox => {
+            checkbox.addEventListener("change", () => {
+                const card = checkbox.closest(".col-sm-6");
+                if (checkbox.checked) {
+                    card.querySelector("h5").style.textDecoration = "line-through";
+                    card.querySelector("h6").style.textDecoration = "line-through";
+                    card.style.opacity = 0.5;
+                } else {
+                    card.querySelector("h5").style.textDecoration = "";
+                    card.querySelector("h6").style.textDecoration = "";
+                    card.style.opacity = 1;
+                }
             });
         });
     }
@@ -111,7 +110,6 @@ function loadItems() {
         localStorage.removeItem("todoList");
     }
     clearIsactive();
-
 }
 
 ui.clearButton.addEventListener("click", () => {
