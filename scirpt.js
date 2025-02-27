@@ -76,6 +76,39 @@ function saveToLocalStorage() {
     localStorage.setItem("todoList", list);
 }
 
+function initFilters() {
+    const filterButtons = document.querySelectorAll('[data-filter]');
+
+    filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            // Remove active class from all buttons
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            // Add active class to clicked button
+            button.classList.add('active');
+
+            const filterValue = button.getAttribute('data-filter');
+            const cards = document.querySelectorAll('.col-sm-6');
+
+            cards.forEach(card => {
+                const checkbox = card.querySelector('.form-check-input');
+                const isDone = checkbox.checked;
+
+                switch (filterValue) {
+                    case 'all':
+                        card.style.display = '';
+                        break;
+                    case 'done':
+                        card.style.display = isDone ? '' : 'none';
+                        break;
+                    case 'undone':
+                        card.style.display = !isDone ? '' : 'none';
+                        break;
+                }
+            });
+        });
+    });
+}
+
 function loadItems() {
     list = localStorage.getItem("todoList")
     if (list) {
@@ -101,6 +134,11 @@ function loadItems() {
                     card.querySelector("h5").style.textDecoration = "";
                     card.querySelector("h6").style.textDecoration = "";
                     card.style.opacity = 1;
+                }
+                // Maintain current filter after status change
+                const activeFilter = document.querySelector('[data-filter].active');
+                if (activeFilter) {
+                    activeFilter.click();
                 }
             });
         });
@@ -130,3 +168,4 @@ function clearIsactive() {
 loadItems();
 
 initDarkMode();
+initFilters();
