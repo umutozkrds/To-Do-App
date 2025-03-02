@@ -5,5 +5,6 @@ function UI() {
     this.todoList = document.querySelector("#list-body");
     this.clearButton = document.querySelector("#clear");
     this.darkModeToggle = document.querySelector("#darkModeToggle");
+    this.searchInput = document.querySelector("#searchInput");
 }
 

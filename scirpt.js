@@ -86,28 +86,44 @@ function initFilters() {
             // Add active class to clicked button
             button.classList.add('active');
 
-            const filterValue = button.getAttribute('data-filter');
-            const cards = document.querySelectorAll('.col-sm-6');
-
-            cards.forEach(card => {
-                const checkbox = card.querySelector('.form-check-input');
-                const isDone = checkbox.checked;
-
-                switch (filterValue) {
-                    case 'all':
-                        card.style.display = '';
-                        break;
-                    case 'done':
-                        card.style.display = isDone ? '' : 'none';
-                        break;
-                    case 'undone':
-                        card.style.display = !isDone ? '' : 'none';
-                        break;
-                }
-            });
+            applyFilters();
         });
     });
 }
+
+function applyFilters() {
+    const activeFilter = document.querySelector('[data-filter].active').getAttribute('data-filter');
+    const searchTerm = ui.searchInput.value.toLowerCase().trim();
+    const cards = document.querySelectorAll('.col-sm-6');
+
+    cards.forEach(card => {
+        const checkbox = card.querySelector('.form-check-input');
+        const isDone = checkbox.checked;
+        const title = card.querySelector('.card-title').textContent.toLowerCase();
+        const subtitle = card.querySelector('.card-subtitle').textContent.toLowerCase();
+        const matchesSearch = searchTerm === '' ||
+            title.includes(searchTerm) ||
+            subtitle.includes(searchTerm);
+
+        let shouldDisplay = matchesSearch;
+
+        switch (activeFilter) {
+            case 'done':
+                shouldDisplay = shouldDisplay && isDone;
+                break;
+            case 'undone':
+                shouldDisplay = shouldDisplay && !isDone;
+                break;
+        }
+
+        card.style.display = shouldDisplay ? '' : 'none';
+    });
+}
+
+// Add search input event listener
+ui.searchInput.addEventListener('input', () => {
+    applyFilters();
+});
 
 function loadItems() {
     list = localStorage.getItem("todoList")
@@ -117,8 +133,8 @@ function loadItems() {
         // Reattach delete button event listeners
         document.querySelectorAll(".delete-btn").forEach(button => {
             button.addEventListener("click", function () {
-                button.closest(".col-sm-6").remove(); // Kartı kaldır
-                saveToLocalStorage(); // Güncelle
+                button.closest(".col-sm-6").remove();
+                saveToLocalStorage();
             });
         });
 
@@ -135,11 +151,7 @@ function loadItems() {
                     card.querySelector("h6").style.textDecoration = "";
                     card.style.opacity = 1;
                 }
-                // Maintain current filter after status change
-                const activeFilter = document.querySelector('[data-filter].active');
-                if (activeFilter) {
-                    activeFilter.click();
-                }
+                applyFilters();
             });
         });
     }

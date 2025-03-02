@@ -106,3 +106,26 @@ body.dark-mode .btn-warning:hover {
     border-color: #997306;
     color: #fff;
 }
+
+/* Dark mode search input styles */
+body.dark-mode .input-group-text {
+    background-color: #444;
+    border-color: #666;
+    color: #fff;
+}
+
+body.dark-mode #searchInput, body.dark-mode #todo-title, body.dark-mode #todo-subtitle {
+    background-color: #333;
+    border-color: #666;
+    color: #fff;
+}
+
+body.dark-mode #searchInput::placeholder, body.dark-mode #todo-title::placeholder, body.dark-mode #todo-subtitle::placeholder {
+    color: #c2b2b2;
+}
+
+body.dark-mode #searchInput:focus {
+    background-color: #444;
+    border-color: #888;
+    box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.1);
+}
